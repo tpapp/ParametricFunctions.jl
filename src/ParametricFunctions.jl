@@ -1,8 +1,9 @@
 module ParametricFunctions
 
 using ContinuousTransformations
-
 import ContinuousTransformations: domain
+
+using ArgCheck
 
 export points
 
