@@ -1,6 +1,10 @@
 module ParametricFunctions
 
-export domain, points
+using ContinuousTransformations
+
+import ContinuousTransformations: domain
+
+export points
 
 abstract FunctionFamily
 
@@ -11,5 +15,7 @@ function domain end
 
 "Recommended points for collocation and function fitting."
 function points end
+
+include("Chebyshev.jl")
 
 end # module
