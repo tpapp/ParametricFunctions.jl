@@ -65,5 +65,6 @@ end
 
 include("Chebyshev.jl")
 include("domaintrans.jl")
+include("valuetrans.jl")
 
 end # module
