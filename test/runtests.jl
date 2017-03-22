@@ -39,4 +39,7 @@ end
     test_univariate(c, 5, -1..1; xs = linspace(-1,1,10), f = exp)
 end
 
-
+@testset "Domain transformations" begin
+    fam = DomainTrans(ℝ⁺, Chebyshev(10))
+    test_univariate(fam, 10, ℝ⁺; xs = linspace(0,5,10), f = x -> 1/(1+x)^2)
+end

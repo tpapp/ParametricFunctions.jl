@@ -64,5 +64,6 @@ function fit{T}(p::ParametricFamily, y::AbstractVector{T})
 end
 
 include("Chebyshev.jl")
+include("domaintrans.jl")
 
 end # module
