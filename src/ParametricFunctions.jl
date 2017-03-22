@@ -9,7 +9,7 @@ export points, degf, basis, basis!, evaluate, basis_matrix, fit, fit!
 
 abstract FunctionFamily
 
-abstract ParametricFunction
+abstract ParametricFamily
 
 "Domain of the parametric function or a function family."
 function domain end
@@ -29,7 +29,7 @@ function basis! end
 """
 Return the basis functions of `p` evaluated at `x`, as a vector.
 """
-basis{T}(p::ParametricFunction, x::T) = basis!(p, x, Vector{T}(degf(p)))
+basis{T}(p::ParametricFamily, x::T) = basis!(p, x, Vector{T}(degf(p)))
 
 """
 Evaluate a parametric function with the given parameters.
@@ -59,7 +59,7 @@ function fit! end
 Fit a parametric function to a function family, returning the
 coefficients. See also the method for `\`.
 """
-function fit{T}(p::ParametricFunction, y::AbstractVector{T})
+function fit{T}(p::ParametricFamily, y::AbstractVector{T})
     fit!(p, y, Vector{T}(degf(p)))
 end
 

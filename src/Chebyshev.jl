@@ -1,6 +1,6 @@
 export Chebyshev
 
-immutable Chebyshev <: ParametricFunction
+immutable Chebyshev <: ParametricFamily
     n::Int
 end
 
