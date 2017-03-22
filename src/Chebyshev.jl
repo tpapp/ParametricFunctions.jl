@@ -47,7 +47,7 @@ function evaluate{T}(c::Chebyshev, θ, x::T)
 end
 
 function fit!{T}(c::Chebyshev, ys::AbstractVector{T}, θ::AbstractVector{T})
-    @argcheck c.n == length(y) == length(θ)
+    @argcheck c.n == length(ys) == length(θ)
     x = points(c, T)
     xpp = ones(T, c.n)
     xp = copy(x)
