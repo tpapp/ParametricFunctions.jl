@@ -1,6 +1,6 @@
 export Chebyshev
 
-immutable Chebyshev
+immutable Chebyshev <: ParametricFunction
     n::Int
 end
 
@@ -10,24 +10,22 @@ points(c::Chebyshev, T = Float64) = cospi.(((c.n:-1:1)-T(0.5))/c.n)
 
 degf(c::Chebyshev) = c.n
 
-function basis!{T}(c::Chebyshev, x::T, p::AbstractVector{T})
-    @argcheck c.n == length(p)
+function basis!{T}(c::Chebyshev, x::T, b::AbstractVector{T})
+    @argcheck c.n == length(b)
     xp = x
     xpp = one(T)
     for i in 1:c.n
         if i == 1
-            p[i] = xpp
+            b[i] = xpp
         elseif i == 2
-            p[i] = xp
+            b[i] = xp
         else
             xp, xpp = 2*x*xp - xpp, xp
-            p[i] = xp
+            b[i] = xp
         end
     end
-    p
+    b
 end
-
-basis{T}(c::Chebyshev, x::T) = basis!(c, x, Vector{T}(c.n))
 
 # note: after benchmarking, it was found that this is faster than Clenshaw.
 # TODO: test for accuracy.
@@ -67,6 +65,3 @@ function fit!{T}(c::Chebyshev, y::AbstractVector{T}, θ::AbstractVector{T})
     end
     θ
 end
-
-fit{T}(c, y::AbstractVector{T}) = fit!(c, y, Vector{T}(c.n))
-

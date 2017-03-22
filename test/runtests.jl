@@ -5,6 +5,7 @@ using ContinuousTransformations
 @testset "Chebyshev polynomials" begin
     c = Chebyshev(5)
 
+    @test degf(c) == 5
     @test domain(c) == -1..1
     @test all(p in -1..1 for p in points(c))
     @test points(c)[3] === 0.0
