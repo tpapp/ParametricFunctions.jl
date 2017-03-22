@@ -46,21 +46,21 @@ function evaluate{T}(c::Chebyshev, θ, x::T)
     s
 end
 
-function fit!{T}(c::Chebyshev, y::AbstractVector{T}, θ::AbstractVector{T})
+function fit!{T}(c::Chebyshev, ys::AbstractVector{T}, θ::AbstractVector{T})
     @argcheck c.n == length(y) == length(θ)
     x = points(c, T)
     xpp = ones(T, c.n)
     xp = copy(x)
     for i in 1:c.n
         if i == 1
-            θ[1] = sum(y) / c.n
+            θ[1] = sum(ys) / c.n
         else
             if i > 2
                 for j in 1:c.n
                     xp[j], xpp[j] = 2*x[j]*xp[j] - xpp[j], xp[j]
                 end
             end
-            θ[i] = dot(xp, y) *2 / c.n
+            θ[i] = dot(xp, ys) *2 / c.n
         end
     end
     θ

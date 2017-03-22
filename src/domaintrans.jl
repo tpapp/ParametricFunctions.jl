@@ -32,4 +32,4 @@ end
 
 evaluate(p::DomainTrans, θ, x) = evaluate(p.inner, θ, p.transformation(x))
 
-fit!(p::DomainTrans, y, θ) = fit!(p.inner, y, θ)
+fit!(p::DomainTrans, ys, θ) = fit!(p.inner, ys, θ)

@@ -59,8 +59,8 @@ function fit! end
 Fit a parametric function to a function family, returning the
 coefficients. See also the method for `\`.
 """
-function fit{T}(p::ParametricFamily, y::AbstractVector{T})
-    fit!(p, y, Vector{T}(degf(p)))
+function fit{T}(p::ParametricFamily, ys::AbstractVector{T})
+    fit!(p, ys, Vector{T}(degf(p)))
 end
 
 include("Chebyshev.jl")
