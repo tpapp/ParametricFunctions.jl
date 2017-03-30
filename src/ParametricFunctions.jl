@@ -98,5 +98,6 @@ fitfun(family::ParametricFamily, ys) = ParametricFunction(family, fit(family, ys
 include("Chebyshev.jl")
 include("domaintrans.jl")
 include("valuetrans.jl")
+include("collocation.jl")
 
 end # module
