@@ -24,7 +24,7 @@ function test_univariate(fam, expected_degf, expected_domain;
     if f ≠ nothing
         zs = points(fam)
         ys = f.(zs)
-        θ1 = fit(fam, f.(zs))
+        θ1 = fit(fam, ys)
         
         for z in zs
             @test evaluate(fam, θ1, z) ≈ f(z)
@@ -33,6 +33,20 @@ function test_univariate(fam, expected_degf, expected_domain;
         if test_basis
             θ2 = basis_matrix(fam, zs) \ ys
             @test θ1 ≈ θ2
+        end
+    end
+
+    # when f given, test function fitting
+    if f ≠ nothing
+        zs = points(fam)
+        pf = fitfun(fam, f.(zs))
+
+        @test points(pf) == points(fam)
+        @test degf(pf) == degf(fam)
+        @test domain(pf) == domain(fam)
+        
+        for z in zs
+            @test pf(z) ≈ f(z)
         end
     end
 end

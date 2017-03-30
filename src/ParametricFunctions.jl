@@ -5,7 +5,9 @@ using ContinuousTransformations
 import ContinuousTransformations: domain
 using Lazy
 
-export points, degf, basis, basis!, evaluate, basis_matrix, fit, fit!
+export
+    points, degf, basis, basis!, evaluate, basis_matrix, fit, fit!,
+    ParametricFamily, family, parameters, fitfun
 
 abstract FunctionFamily
 
@@ -62,6 +64,33 @@ coefficients. See also the method for `\`.
 function fit{T}(p::ParametricFamily, ys::AbstractVector{T})
     fit!(p, ys, Vector{T}(degf(p)))
 end
+
+immutable ParametricFunction{TF <: ParametricFamily, Tθ <: AbstractVector}
+    family::TF
+    θ::Tθ
+    function ParametricFunction(fam, θ)
+        @argcheck degf(fam) == length(θ) "Incompatible coefficients."
+        new(fam, θ)
+    end
+end
+
+ParametricFunction{TF, Tθ}(fam::TF, θ::Tθ) = ParametricFunction{TF, Tθ}(fam, θ)
+
+"Parametric family of a parametric function."
+family(f::ParametricFunction) = f.family
+
+"Parameters of a parametric function."
+parameters(f::ParametricFunction) = f.θ
+
+@forward ParametricFunction.family domain, points, degf
+
+"""
+Fit a function from a parametric family at values `ys`, which were
+evaluated at `points(family)`.
+"""
+fitfun(family::ParametricFamily, ys) = ParametricFunction(family, fit(family, ys))
+
+(f::ParametricFunction)(x) = evaluate(f.family, f.θ, x)
 
 include("Chebyshev.jl")
 include("domaintrans.jl")
