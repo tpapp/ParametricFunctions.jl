@@ -99,5 +99,6 @@ include("Chebyshev.jl")
 include("domaintrans.jl")
 include("valuetrans.jl")
 include("collocation.jl")
+include("plots.jl")
 
 end # module

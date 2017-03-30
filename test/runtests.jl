@@ -1,5 +1,6 @@
 using ParametricFunctions
 using Base.Test
+using Plots; gr()
 using ContinuousTransformations
 
 function test_univariate(fam, expected_degf, expected_domain;
@@ -84,4 +85,8 @@ end
     cres = CollocationResidual(model, fam, residual_function)
     r = cres(θ)
     @test r ≈ (points(fam) - model.α).^2-model.β
+end
+
+@testset "Plots" begin
+    @test isa(plot(fitfun(Chebyshev(10), exp), label = false), Plots.Plot)
 end
