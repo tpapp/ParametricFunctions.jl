@@ -57,13 +57,16 @@ coefficients in the third argument.
 """
 function fit! end
 
+"Fit a function to a parametric family."
+fit!{T <: ParametricFamily}(p::T, f::Function, θ) =  fit!(p, f.(points(p)), θ)
+
 """
 Fit a parametric function to a function family, returning the
-coefficients. See also the method for `\`.
+coefficients.
 """
-function fit{T}(p::ParametricFamily, ys::AbstractVector{T})
-    fit!(p, ys, Vector{T}(degf(p)))
-end
+fit(p::ParametricFamily, ys::AbstractVector) = fit!(p, ys, Vector{eltype(ys)}(degf(p)))
+
+fit(p::ParametricFamily, f::Function) = fit(p, f.(points(p)))
 
 immutable ParametricFunction{TF <: ParametricFamily, Tθ <: AbstractVector}
     family::TF

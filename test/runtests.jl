@@ -24,7 +24,7 @@ function test_univariate(fam, expected_degf, expected_domain;
     if f ≠ nothing
         zs = points(fam)
         ys = f.(zs)
-        θ1 = fit(fam, ys)
+        θ1 = fit(fam, f)
         
         for z in zs
             @test evaluate(fam, θ1, z) ≈ f(z)
