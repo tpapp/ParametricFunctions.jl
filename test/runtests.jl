@@ -2,6 +2,7 @@ using ParametricFunctions
 using Base.Test
 using Plots; gr()
 using ContinuousTransformations
+using VisualRegressionTests
 
 function test_univariate(fam, expected_degf, expected_domain;
                          xs = nothing, test_basis = true, f = nothing)
@@ -88,5 +89,11 @@ end
 end
 
 @testset "Plots" begin
-    @test isa(plot(fitfun(Chebyshev(10), exp), label = false), Plots.Plot)
+    ref_image = Pkg.dir("ParametricFunctions", "test", "img00.png")
+    function test_plot(fn)
+        plt = plot(fitfun(Chebyshev(10), exp), label = false)
+        png(plt, fn)
+    end
+    # test_plot(ref_image) # regenerates
+    @test test_images(VisualTest(test_plot, ref_image), popup = false) |> success
 end
