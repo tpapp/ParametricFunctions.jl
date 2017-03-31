@@ -3,14 +3,18 @@
 
 ## for these packages, use master
 Pkg.clone("https://github.com/tpapp/ContinuousTransformations.jl.git");
-## workaround for https://github.com/JuliaPlots/Plots.jl/issues/753
-## and https://github.com/JuliaImages/Images.jl/issues/604
+
 if VERSION ≥ v"0.6-"
-    for pkg in ["Plots", "PlotThemes", "PlotUtils", "Images"]
+    ## workaround for https://github.com/JuliaPlots/Plots.jl/issues/753
+    for pkg in ["Plots", "PlotThemes", "PlotUtils"]
         Pkg.add(pkg)
         Pkg.checkout(pkg)
     end
+    ## and https://github.com/JuliaImages/Images.jl/issues/604
+    Pkg.clone("git@github.com:JuliaImages/Images.jl.git");
+    Pkg.checkout("Images", "teh/0.6");
 end
+
 
 ## original test script
 Pkg.clone(pwd()); Pkg.build("ParametricFunctions");
