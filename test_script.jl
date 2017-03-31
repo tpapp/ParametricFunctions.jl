@@ -4,8 +4,9 @@
 ## for these packages, use master
 Pkg.clone("https://github.com/tpapp/ContinuousTransformations.jl.git");
 ## workaround for https://github.com/JuliaPlots/Plots.jl/issues/753
+## and https://github.com/JuliaImages/Images.jl/issues/604
 if VERSION ≥ v"0.6-"
-    for pkg in ["Plots", "PlotThemes", "PlotUtils"]
+    for pkg in ["Plots", "PlotThemes", "PlotUtils", "Images"]
         Pkg.add(pkg)
         Pkg.checkout(pkg)
     end
