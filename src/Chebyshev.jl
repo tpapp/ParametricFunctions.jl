@@ -41,7 +41,7 @@ end
 function evaluate{T}(c::Chebyshev, θ, x::T)
     T₋₁ = x
     T₋₂ = one(T)
-    s = zero(x)
+    s = zero(T)
     for i in 1:c.n
         if i == 1
             s += T₋₂*θ[i]
