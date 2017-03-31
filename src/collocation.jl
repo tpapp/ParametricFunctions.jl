@@ -1,4 +1,6 @@
-export CollocationResidual
+import NLsolve
+
+export CollocationResidual, solve_collocation
 
 """
 Return an object that, when given parameters `θ`, construct a
@@ -9,7 +11,7 @@ argument (should be a vector), while the first one returns them.
 
 NOTE: Useful for passing to a solver such as `NLsolve.nlsolve`.
 """
-immutable CollocationResidual{Tmodel, Tfam <: ParametricFamily, Txs, Tresidual}
+immutable CollocationResidual{Tmodel, Tfam <: ParametricFamily, Txs, Tresidual} <: Function
     model::Tmodel
     fam::Tfam
     xs::Txs
@@ -37,3 +39,10 @@ function (cr::CollocationResidual)(θ, r)
 end
 
 (cr::CollocationResidual)(θ) = cr(θ, Vector{eltype(cr.xs)}(degf(cr)))
+
+function solve_collocation(cr::CollocationResidual, f₀; autodiff = true, options...)
+    θ₀ = fit(cr.fam, f₀)
+    o = NLsolve.nlsolve(cr, θ₀, autodiff = autodiff, options...)
+    !NLsolve.converged(o) || warn("optimization did not converge")
+    ParametricFunction(cr.fam, o.zero), o
+end
