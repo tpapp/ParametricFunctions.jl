@@ -4,6 +4,8 @@ using Plots; gr()
 using ContinuousTransformations
 using VisualRegressionTests
 
+@test false # deliberate breakage
+
 function test_univariate(fam, expected_degf, expected_domain;
                          xs = nothing, test_basis = true, f = nothing)
     @test degf(fam) == expected_degf
