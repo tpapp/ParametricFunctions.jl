@@ -11,7 +11,7 @@ if VERSION ≥ v"0.6-"
         Pkg.checkout(pkg)
     end
     ## and https://github.com/JuliaImages/Images.jl/issues/604
-    Pkg.clone("git@github.com:JuliaImages/Images.jl.git");
+    Pkg.clone("https://github.com/JuliaImages/Images.jl.git");
     Pkg.checkout("Images", "teh/0.6");
 end
 
