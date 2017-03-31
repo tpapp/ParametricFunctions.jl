@@ -14,3 +14,6 @@ end
 ## original test script
 Pkg.clone(pwd()); Pkg.build("ParametricFunctions");
 Pkg.test("ParametricFunctions"; coverage=true)
+
+## exit
+quit()
