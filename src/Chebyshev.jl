@@ -36,8 +36,8 @@ function basis!{T}(c::Chebyshev, x::T, b::AbstractVector{T})
     b
 end
 
-# note: after benchmarking, it was found that this is faster than Clenshaw.
-# TODO: test for accuracy.
+# note: after benchmarking, it was found that this is faster than Clenshaw,
+# and at least as accurate.
 function evaluate{T}(c::Chebyshev, θ, x::T)
     T₋₁ = x
     T₋₂ = one(T)
