@@ -65,8 +65,8 @@ end
 end
 
 @testset "Domain transformations" begin
-    fam = DomainTrans(ℝ⁺, Chebyshev(10))
-    test_univariate(fam, 10, ℝ⁺; xs = linspace(0,5,10), f = x -> 1/(1+x)^2)
+    test_univariate(DomainTrans(ℝ⁺, Chebyshev(10)), 10, ℝ⁺; xs = linspace(0,5,10), f = x -> 1/(1+x)^2)
+    test_univariate(DomainTrans(ℝ, REALCIRCLE, Chebyshev(10)), 10, ℝ; xs = linspace(0,5,10), f = x -> 1/(1+x)^2)
 end
 
 @testset "Value transformations" begin
