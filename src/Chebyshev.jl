@@ -19,7 +19,7 @@ degf(c::Chebyshev) = c.n
 macro _chebyshev_recurrence!(x, T₋₁, T₋₂)
     T₋₁ = esc(T₋₁)
     T₋₂ = esc(T₋₂)
-    :(($(T₋₁), $(T₋₂)) = _chebyshev_recurrence($x, $(T₋₁), $(T₋₂)))
+    :(($(T₋₁), $(T₋₂)) = _chebyshev_recurrence($(esc(x)), $(T₋₁), $(T₋₂)))
 end
 
 function basis!{T}(c::Chebyshev, x::T, b::AbstractVector{T})
