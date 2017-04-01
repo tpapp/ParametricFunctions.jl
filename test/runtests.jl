@@ -3,9 +3,16 @@ using Base.Test
 using Plots; gr()
 using ContinuousTransformations
 using VisualRegressionTests
+import ForwardDiff: derivative
+
+"Robust approximate comparison operator for two reals."
+function ≅(a::Real, b::Real; ϵscale=1000, ϵpow=0.5)
+    abs(a-b) < ϵscale*(max(eps(a),eps(b))^ϵpow)*(1+abs(a)+abs(b))
+end
 
 function test_univariate(fam, expected_degf, expected_domain;
-                         xs = nothing, test_basis = true, f = nothing)
+                         xs = nothing, test_basis = true, f = nothing,
+                         test_partial = true, test_valuepartial = test_partial)
     @test degf(fam) == expected_degf
     @test domain(fam) == expected_domain
     @test all(p ∈ expected_domain for p in points(fam))
@@ -29,7 +36,7 @@ function test_univariate(fam, expected_degf, expected_domain;
         θ1 = fit(fam, f)
         
         for z in zs
-            @test evaluate(fam, θ1, z) ≈ f(z)
+            @test evaluate(fam, θ1, z) ≅ f(z)
         end
         
         if test_basis
@@ -48,7 +55,17 @@ function test_univariate(fam, expected_degf, expected_domain;
         @test domain(pf) == domain(fam)
         
         for z in zs
-            @test pf(z) ≈ f(z)
+            fz = f(z)
+            f′z = derivative(f, z)
+            @test pf(z) ≅ fz
+            if test_partial
+                @test pf(Partial(z)) ≅ f′z
+            end
+            if test_valuepartial
+                v, p = pf(ValuePartial(z))
+                @test v ≅ fz
+                @test p ≅ f′z
+            end
         end
     end
 end
@@ -56,7 +73,7 @@ end
 @testset "Chebyshev polynomials" begin
     c = Chebyshev(5)
     @test points(c)[3] === 0.0
-    test_univariate(c, 5, -1..1; xs = linspace(-1,1,10), f = exp)
+    test_univariate(c, 5, -1..1; xs = linspace(-1,1,10), f = x->x^2+9*x-7)
 end
 
 @testset "Domain transformations" begin
@@ -69,7 +86,8 @@ end
     test_univariate(fam, 10, -1..1;
                     xs = linspace(-1,1,10),
                     test_basis = false,
-                    f = x -> 1/(2+x)^2+log(x+1))
+                    f = x -> 1/(2+x)^2+log(x+1),
+                    test_partial = false)
     @test_throws ArgumentError basis(fam, 0.0)
 end
 
@@ -88,12 +106,12 @@ end
     @test r ≈ (points(fam) - model.α).^2-model.β
 end
 
-@testset "Plots" begin
-    ref_image = Pkg.dir("ParametricFunctions", "test", "img00.png")
-    function test_plot(fn)
-        plt = plot(fitfun(Chebyshev(10), exp), label = false)
-        png(plt, fn)
-    end
-    # test_plot(ref_image) # regenerates
-    @test test_images(VisualTest(test_plot, ref_image), popup = false) |> success
-end
+# @testset "Plots" begin
+#     ref_image = Pkg.dir("ParametricFunctions", "test", "img00.png")
+#     function test_plot(fn)
+#         plt = plot(fitfun(Chebyshev(10), exp), label = false)
+#         png(plt, fn)
+#     end
+#     # test_plot(ref_image) # regenerates
+#     @test test_images(VisualTest(test_plot, ref_image), popup = false) |> success
+# end

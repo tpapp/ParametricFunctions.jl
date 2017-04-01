@@ -32,4 +32,15 @@ end
 
 evaluate(p::DomainTrans, θ, x) = evaluate(p.inner, θ, p.transformation(x))
 
+function evaluate(p::DomainTrans, θ, x::Partial)
+    y, dy = p.transformation(x.x, DERIV)
+    evaluate(p.inner, θ, Partial(y))*dy
+end
+
+function evaluate(p::DomainTrans, θ, x::ValuePartial)
+    y, dy = p.transformation(x.x, DERIV)
+    z, dz = evaluate(p.inner, θ, ValuePartial(y))
+    z, dy*dz
+end
+
 fit!(p::DomainTrans, ys, θ) = fit!(p.inner, ys, θ)

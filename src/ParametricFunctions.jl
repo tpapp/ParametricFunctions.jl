@@ -6,8 +6,8 @@ import ContinuousTransformations: domain
 using Lazy
 
 export
-    points, degf, basis, basis!, evaluate, basis_matrix, fit, fit!,
-    ParametricFamily, family, parameters, fitfun
+    points, degf, basis, basis!, Partial, ValuePartial, evaluate,
+    basis_matrix, fit, fit!, ParametricFamily, family, parameters, fitfun
 
 abstract FunctionFamily
 
@@ -32,6 +32,16 @@ function basis! end
 Return the basis functions of `p` evaluated at `x`, as a vector.
 """
 basis{T}(p::ParametricFamily, x::T) = basis!(p, x, Vector{T}(degf(p)))
+
+"""
+Partial derivative in the given coordinate.
+"""
+immutable Partial{T} x::T end
+
+"""
+Value and partial derivative in the given coordinate.
+"""
+immutable ValuePartial{T} x::T end
 
 """
 Evaluate a parametric function with the given parameters.
