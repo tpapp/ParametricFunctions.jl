@@ -5,9 +5,10 @@ using ContinuousTransformations
 import ContinuousTransformations: domain
 using Lazy
 
-export
+export                          # FIXME reorder nicely when interface stabilizes
     points, degf, basis, basis!, Partial, ValuePartial, evaluate,
-    basis_matrix, fit, fit!, ParametricFamily, family, parameters, fitfun
+    basis_matrix, fit, fit!, ParametricFamily, family, parameters, fitfun,
+    ParametricFunction
 
 abstract FunctionFamily
 

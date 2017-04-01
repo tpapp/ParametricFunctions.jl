@@ -21,7 +21,11 @@ function test_univariate(fam, expected_degf, expected_domain;
     if f ≠ nothing
         zs = points(fam)
         ys = f.(zs)
+        θ0 = zeros(degf(fam))
+        fit!(fam, f, θ0)
         θ1 = fit(fam, f)
+
+        @test θ0 == θ1
         
         for z in zs
             @test evaluate(fam, θ1, z) ≅ f(z)
@@ -41,6 +45,7 @@ function test_univariate(fam, expected_degf, expected_domain;
         @test points(pf) == points(fam)
         @test degf(pf) == degf(fam)
         @test domain(pf) == domain(fam)
+        @test family(pf) == fam
         
         for z in zs
             fz = f(z)
@@ -77,4 +82,14 @@ end
                     f = x -> 1/(2+x)^2+log(x+1),
                     test_partial = false)
     @test_throws ArgumentError basis(fam, 0.0)
+end
+
+@testset "Parametric function semantics" begin
+    fam = Chebyshev(10)
+    θ = rand_θ(10)
+    f = ParametricFunction(fam, θ)
+    @test degf(f) == 10
+    @test parameters(f) == θ
+    @test points(f) == points(fam)
+    @test domain(f) == domain(fam)
 end

@@ -20,7 +20,7 @@ end
 
 evaluate(p::ValueTrans, θ, x) = p.trans_function(x)(evaluate(p.inner, θ, x))
 
-function fit!(p::ValueTrans, ys, θ)
+function fit!(p::ValueTrans, ys::AbstractVector, θ)
     zs = [inv(p.trans_function(x))(y) for (x,y) in zip(points(p.inner), ys)]
     fit!(p.inner, zs, θ)
 end

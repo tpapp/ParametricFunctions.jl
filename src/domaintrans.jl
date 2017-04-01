@@ -43,4 +43,4 @@ function evaluate(p::DomainTrans, θ, x::ValuePartial)
     z, dy*dz
 end
 
-fit!(p::DomainTrans, ys, θ) = fit!(p.inner, ys, θ)
+fit!(p::DomainTrans, ys::AbstractVector, θ) = fit!(p.inner, ys, θ)
