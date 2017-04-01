@@ -12,3 +12,16 @@ end
     r = cres(θ)
     @test r ≈ (points(fam) - model.α).^2-model.β
 end
+
+immutable TrivialModel2{T}
+    α::T
+end
+
+@testset "Collocation solver" begin
+    (m::TrivialModel2)(x) = m.α*x
+    model0 = TrivialModel2(2.0)
+    residualf(model::TrivialModel2, f, x) = f(x)-model(x)
+    res = CollocationResidual(model0, Chebyshev(10), residualf)
+    f_sol, o = solve_collocation(res, zero)
+    @test norm([f_sol(x)-model0(x) for x in linspace(domain(f_sol), 100)]) ≤ 1e-14
+end

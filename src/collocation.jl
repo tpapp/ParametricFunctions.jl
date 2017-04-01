@@ -42,7 +42,7 @@ end
 
 function solve_collocation(cr::CollocationResidual, f₀; autodiff = true, options...)
     θ₀ = fit(cr.fam, f₀)
-    o = NLsolve.nlsolve(cr, θ₀, autodiff = autodiff, options...)
-    !NLsolve.converged(o) || warn("optimization did not converge")
+    o = NLsolve.nlsolve(cr, θ₀; autodiff = autodiff, options...)
+    NLsolve.converged(o) || warn("optimization did not converge")
     ParametricFunction(cr.fam, o.zero), o
 end
